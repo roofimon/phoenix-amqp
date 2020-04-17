@@ -12,6 +12,8 @@ defmodule Genserv.Application do
       Genserv.Repo,
       # Start the endpoint when the application starts
       GenservWeb.Endpoint,
+      # Consumer
+      {SimpleQueue, []}
       # {Redix, [host: "localhost", name: :redix]},
       # {Redix.Pubsub, [host: "localhost", name: :redix_pubsub]}
       # Starts a worker by calling: Genserv.Worker.start_link(arg)
