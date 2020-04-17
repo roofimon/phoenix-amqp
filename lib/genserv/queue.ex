@@ -47,28 +47,32 @@ defmodule SimpleQueue do
     """
     # Confirmation sent by the broker after registering this process as a consumer
     def handle_info({:basic_consume_ok, %{consumer_tag: consumer_tag}}, chan) do
+        Logger.debug("-------------------------------->handle_info basic_consume_ok")
         {:noreply, chan}
       end
     
     # Sent by the broker when the consumer is unexpectedly cancelled (such as after a queue deletion)
     def handle_info({:basic_cancel, %{consumer_tag: consumer_tag}}, chan) do
-    {:stop, :normal, chan}
+        Logger.debug("-------------------------------->handle_info basic_cancel")
+        {:stop, :normal, chan}
     end
 
     # Confirmation sent by the broker to the consumer process after a Basic.cancel
     def handle_info({:basic_cancel_ok, %{consumer_tag: consumer_tag}}, chan) do
-    {:noreply, chan}
+        Logger.debug("-------------------------------->handle_info basic_cancel_ok")
+        {:noreply, chan}
     end
 
     def handle_info({:basic_deliver, payload, %{delivery_tag: tag, redelivered: redelivered}}, chan) do
     # You might want to run payload consumption in separate Tasks in production
-    consume(chan, tag, redelivered, payload)
-    {:noreply, chan}
+        Logger.debug("-------------------------------->handle_info basic_deliver")
+        consume(chan, tag, redelivered, payload)
+        {:noreply, chan}
     end
   
     ### Client API / Helper functions
   
     def start_link(state \\ []) do
-      GenServer.start_link(__MODULE__, state, name: __MODULE__)
+        GenServer.start_link(__MODULE__, state, name: __MODULE__)
     end
   end
